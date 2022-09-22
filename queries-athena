@@ -1,0 +1,42 @@
+-- volume $ por produto
+select productid, name, sum(cast(linetotal as double))as total, unitprice, count(*)as quantidade
+from detail 
+group by productid, name, unitprice
+order by sum(cast(linetotal as double)) desc 
+
+-- volume $ por cliente OK
+select customerid, firstname, lastname, sum(cast(totaldue  as double)) as total, count(*) as quantidade
+from header
+group by customerid, firstname, lastname
+order by sum(cast(totaldue  as double)) desc 
+
+select * from header
+
+-- volume $ por localidade OK
+select countryregion, stateprovince, city, sum(cast(totaldue  as double)) as total, count(*) as quantidade
+from header 
+group by countryregion, stateprovince, city 
+order by sum(cast(totaldue  as double)) desc 
+
+-- volume qtde por produto
+select productid, name, count(*), s.unitprice 
+from detail 
+group by productid, name, unitprice  
+order by count(*) desc 
+
+-- volume qtde por cliente OK
+select customerid, firstname, lastname, count(*) as quantidade, sum(cast(totaldue as double)) as total 
+from header
+group by customerid, firstname, lastname
+order by count(*) desc 
+
+-- volume qtde por localidade OK
+select countryregion, stateprovince, city, count(*) as quantidade,sum(cast(totaldue as float)) as total
+from header 
+group by countryregion, stateprovince, city 
+order by count(*) desc 
+
+-- media de valor gasto por cliente OK
+select avg(cast(s.totaldue as float))as média,max(cast(s.totaldue as float))as max,min(cast(s.totaldue as float))as min
+from salesorderheader s, customer c
+where s.customerid = c.customerid 
